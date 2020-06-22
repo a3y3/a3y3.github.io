@@ -8,8 +8,8 @@ function handleTheme(){
 	let themePreference = Cookies.get(THEME);
 	
 	if(!themePreference) {
-		themePreference = THEME_LIGHT; 	// Default is light in body.
-		Cookies.set(THEME, THEME_LIGHT, {'expires': 365});
+		themePreference = THEME_DARK; 	// Default is dark in body.
+		Cookies.set(THEME, themePreference, {'expires': 365});
 	}
 	else {
 		let switcher = document.querySelector("#theme-switch");
