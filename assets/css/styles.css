@@ -128,3 +128,7 @@ code {
   font:12px Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace;
   color: var(--color-code);
 }
+
+.blog-post-index {
+  margin-top: 45px;
+}
