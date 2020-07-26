@@ -31,6 +31,6 @@ $(function(){
 		else{ chosenTheme = THEME_DARK; }
 		
 		Cookies.set(THEME, chosenTheme, {'expires': 365});
-		handleTheme();
+		location.reload(); // gives Disqus an opportunity to change its colors
 	});	
 });

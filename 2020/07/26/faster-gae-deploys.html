@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Deploy microservices to Google App Engine faster - a3y3 - Soham Dongargaonkar</title>
+		
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+		<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Deploy microservices to Google App Engine faster</title>
+<meta name="generator" content="Jekyll v4.1.0" />
+<meta property="og:title" content="Deploy microservices to Google App Engine faster" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Use Azure Pipelines to deploy microservices to GAE in parallel, greatly reducing deploy time." />
+<meta property="og:description" content="Use Azure Pipelines to deploy microservices to GAE in parallel, greatly reducing deploy time." />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-26T00:00:00-04:00" />
+<script type="application/ld+json">
+{"url":"/2020/07/26/faster-gae-deploys.html","headline":"Deploy microservices to Google App Engine faster","dateModified":"2020-07-26T00:00:00-04:00","datePublished":"2020-07-26T00:00:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2020/07/26/faster-gae-deploys.html"},"description":"Use Azure Pipelines to deploy microservices to GAE in parallel, greatly reducing deploy time.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+	</head>
+	<body data-theme="dark">
+		<nav class="navbar navbar-expand-md navbar-light">
+			<a class="navbar-brand" href="/">Home</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/projects.html">Projects</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/about.html">About</a>
+					</li>
+					<label class="switch" style="margin-top: 10px; margin-left: 10px;">
+						<input type="checkbox" id="theme-switch" checked="checked">
+						<span class="slider round"></span>
+					</label>
+				</ul>
+			</div>
+		</nav>
+		<div class="container">
+			<div class="content">
+				<h1>Deploy microservices to Google App Engine faster</h1>
+<p>26 Jul 2020</p>
+<section>
+	<h3>tl;dr</h3>
+	<p>
+		You can define the code for deploying each microservice inside an Azure Pipelines <a target="_blank" href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml">job.</a> Since jobs automatically run in parallel, these microservices will be deployed at once rather than sequentially, greatly reducing your time to deploy.
+	</p>
+  <p>
+    If you're familiar with Azure Pipelines syntax, you can also <a href="#template-parallel-deploys">skip to the chunk of this article</a> (using loops to generate jobs to deploy in parallel).
+  </p>
+</section>
+
+<section>
+	<h3>Who this article is for</h3>
+	<p>
+		You might find this article relevant if:
+		<ul>
+			<li>You have a microservice based architecture.</li>
+			<li>You use Google App Engine to host them.</li>
+			<li>
+				You already use or are okay with learning how to use <a target="_blank" href="https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops">Azure Pipelines</a> to deploy them.
+			</li>
+		</ul>
+	</p>
+</section>
+
+<section>
+	<h3>Deploying to GCloud</h3>
+  <h4>Getting Started</h4>
+	<p>
+		Make sure you have an account on Azure Devops (I'm going to call that ADO from now) that allows you to create pipelines. Go ahead and set up a basic YAML pipeline with a blank file and a trigger of your choice:
+<pre>
+# azure-pipelines.yaml
+trigger:
+  master
+</pre>
+    This pipeline will trigger when the <code>master</code> branch is updated. This is just an example, your triggers could (and should) differ, that's not really important.
+	</p>
+
+  <h4>Add your first Stage</h4>
+  <p>
+    Stages in ADO aren't strictly necessary to be specified, but it's a good idea to do that since you might want to later create a <code>Test</code> stage that the <code>Deploy</code> stage depends on. In the stage, add conditional jobs that call a template (which we will create in the next step). The conditions define when those jobs are actually created in the final YAML that ADO generates for you. For example:
+
+<pre>
+# azure-pipelines.yaml
+trigger:
+  master
+stages:
+  - stage: 'Deploy'
+    pool:
+      vmImage: 'ubuntu-latest'
+    jobs:
+      - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+        - template: deploy/template.yml
+          parameters:
+            environment: 'dev'
+      - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
+        - template: deploy/template.yml
+          parameters:
+            environment: 'staging'
+      - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/release/') }}:
+        - template: deploy/template.yml
+          parameters:
+            environment: 'production'
+</pre> 
+
+  </p>
+
+  <h4>Create the deploy template</h4>
+  <p>
+  In the yaml above, the dynamically created jobs call a template with the <code>environment</code> parameter. The template will use that parameter to determine where to deploy the microservices to.
+  </p>
+  <p>
+    This is also where we bring in the parallel deploys. Note that each Job is run in parallel by ADO, so all we have to do is define a job for each microservice. 
+  </p>
+  <p>
+    Let's say the general way to deploy a microservice is like:
+<pre>
+# insert bash scripts here to handle pre deploy and create/edit/prepare your app.yaml
+gcloud app deploy
+</pre>
+    Then, all we need to do is:
+    <ol>
+      <li>
+        Figure out how to run gcloud.
+      </li>
+      <li>
+        Figure out permissions for gcloud.
+      </li>
+    </ol>
+  </p>
+  <p>
+    For 1, run the commands:
+<pre>
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-295.0.0-linux-x86_64.tar.gz &&
+tar zxf google-cloud-sdk-295.0.0-linux-x86_64.tar.gz google-cloud-sdk &&
+./google-cloud-sdk/install.sh --quiet
+</pre>
+  </p>
+  <p>
+    For 2 we need to create a service account. Create a new service account on Gcloud with App Engine Admin permisisons and upload the secret key to ADO's <code>Library</code>. You can then use a <code>DownloadSecureFile</code> task to download that onto your ADO VM (the one that's running this deploy) and run:
+<pre>
+gcloud auth activate-service-account --key-file=$(serviceAccountKey.secureFilePath)
+</pre>
+    to activate the service account.
+  </p>
+  <p>
+    Your template will look like:
+
+<pre>
+# deploy/template.yaml
+parameters:
+- name: environment
+  type: string
+
+jobs:
+  - job: 'deploy'
+    steps:
+      - script 1
+      - script 2
+      - script 3
+      - gcloud app deploy --project my-project-${{parameters.environment}}
+</pre>
+
+  </p>
+  <h4 id="template-parallel-deploys">Modify template to allow parallel deploys</h4>
+  <p>A very powerful but rather undocumented of Azure Pipelines is loops. Using these loops, we can reuse our existing job for multiple micoservices. And since jobs run in parallel, all these microservices will deploy at the same time, saving loads of time!</p>
+  <p>With loops, our pipeline now looks something like:
+
+<pre>
+# deploy/template.yaml
+parameters:
+- name: environment
+  type: string
+- name: microservices
+  type: object
+  default:
+    - microservice1
+    - microservice2
+    - microservice3 
+
+jobs:
+  - ${{ each microservice in parameters.microservices }}:
+    - job: 'deploy'
+      steps:
+        - script 1
+        - script 2
+        - script 3
+        - gcloud app deploy --project my-project-${{parameters.environment}}
+</pre>
+
+  </p>
+  <p>
+    <b>Tip</b>: Make sure you are VERY careful with your indentation when you use either conditionals or loops. YAML doesn't generally hold too much importance to indentation, but loops and conditionals don't have an <code>endif</code> or an <code>endfor</code>, and ADO will use indentation to recognize when you want to end your loop.
+  </p>
+  <p>
+    When this pipeline is triggered, this is what you will see in the UI:
+    <img class="img-div-fit" src="/assets/images/parallel-microservices-deploy.png">
+  </p>
+  <p>
+    And that's it! Regardless of how many microservices you add, the deploy will still take around 10 minutes (in reality though, I'm sure there's some sort of limit beyond which either ADO or GCP can't handle parallel deploys, but I've tried with as many as 12 and neither cloud service even faltered)
+  </p>
+  <p>
+    Please note that the above is a highly oversimplified version of what your actual deploy YAML will look like. Let me know if you have any specific questions below, and I'd love to answer them :)
+  </p>
+</section>
+
+
+
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="/assets/js/js.cookie.js"></script>
+		<script type="text/javascript" src="/assets/js/main.js"></script>
+	</body>
+</html>

@@ -132,3 +132,19 @@ code {
 .blog-post-index {
   margin-top: 45px;
 }
+
+.center {
+  text-align: center;
+}
+
+section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid gray;
+  border-bottom: 
+}
+
+.img-div-fit{
+  max-width:100%;
+  max-height:100%
+}
