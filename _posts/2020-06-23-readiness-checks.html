@@ -1,53 +1,10 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		
-			<title>How to add Readiness Checks for Google App Engine on Django - a3y3 - Soham Dongargaonkar</title>
-		
-		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-
-		<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
-		<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>How to add Readiness Checks for Google App Engine on Django</title>
-<meta name="generator" content="Jekyll v4.1.0" />
-<meta property="og:title" content="How to add Readiness Checks for Google App Engine on Django" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="A short tutorial for adding readiness checks for GAE, with explanation and unit tests." />
-<meta property="og:description" content="A short tutorial for adding readiness checks for GAE, with explanation and unit tests." />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-06-23T00:00:00-04:00" />
-<script type="application/ld+json">
-{"url":"/2020/06/23/readiness-checks.html","headline":"How to add Readiness Checks for Google App Engine on Django","dateModified":"2020-06-23T00:00:00-04:00","datePublished":"2020-06-23T00:00:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2020/06/23/readiness-checks.html"},"description":"A short tutorial for adding readiness checks for GAE, with explanation and unit tests.","@type":"BlogPosting","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-	</head>
-	<body data-theme="dark">
-		<nav class="navbar navbar-expand-md navbar-light">
-			<a class="navbar-brand" href="/">Home</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="/projects.html">Projects</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/about.html">About</a>
-					</li>
-					<label class="switch" style="margin-top: 10px; margin-left: 10px;">
-						<input type="checkbox" id="theme-switch" checked="checked">
-						<span class="slider round"></span>
-					</label>
-				</ul>
-			</div>
-		</nav>
-		<div class="container">
-			<div class="content">
-				<h1>How to add Readiness Checks for Google App Engine on Django</h1>
-<p>23 Jun 2020</p>
+---
+title: How to add Readiness Checks for Google App Engine on Django
+layout: posts
+comments: true
+description: A short tutorial for adding readiness checks for GAE, with explanation and unit tests.
+summary: A while ago I was tasked with adding readiness checks for a Django App. This wasn't as straight forward as I had hoped, so here's a tutorial for the next person who has to do this.
+---
 <h3>Readiness Checks</h3>
 <p> A while ago I was tasked with adding <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/configuring-your-app-with-app-yaml#readiness_checks">readiness checks</a> for a Django App. This wasn't as straight forward as I had hoped, so here's a tutorial for the next person who has to do this.</p>
 <p>The very first thing you need to do is add a new <a href="https://docs.djangoproject.com/en/3.0/topics/http/middleware/">Middleware</a>, say, <code>HealthCheckMiddleware</code> to your Django app. Adding an API via a middleware and not a view might seem strange at first, but it's important that you do this, because your readiness check must be executed before anything else, including Django's inbuilt middleware chain. The skeleton for the middleware will look like:</p>
@@ -126,30 +83,3 @@ app_start_timeout_sec: 300
               self.assertEqual(response.status_code, 503)
 </pre>
 <p>And that's it! You can see if it worked fine by running <code>python manage.py test tests.HealthCheckMiddlewareTestCase</code>. You can now be rest assured that App Engine will only route traffic to your instance only when it can successfully connect to your database!</p>
-
-
-<div id="disqus_thread"></div>
-<script>
-var disqus_config = function () {
-this.page.url = "https://a3y3.dev" + "/2020/06/23/readiness-checks.html";
-this.page.identifier = "2020-06-23 00:00:00 -0400";
-};
-
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://a3y3-dev.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>This page uses Disqus for comments which uses Javascript. Please enable if you wish to participate!</noscript>
-
-			</div>
-		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="/assets/js/js.cookie.js"></script>
-		<script type="text/javascript" src="/assets/js/main.js"></script>
-	</body>
-</html>

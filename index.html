@@ -1,78 +1,14 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		
-		<title>a3y3 - Soham Dongargaonkar</title>
-		
-		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+---
+layout: default
+description: 'A blog dedicated to (mostly) software development; challenges I faced, how I overcame them, etc.'
+---
 
-		<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
-		<!-- Begin Jekyll SEO tag v2.6.1 -->
-<meta name="generator" content="Jekyll v4.1.0" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="A blog dedicated to (mostly) software development; challenges I faced, how I overcame them, etc." />
-<meta property="og:description" content="A blog dedicated to (mostly) software development; challenges I faced, how I overcame them, etc." />
-<script type="application/ld+json">
-{"url":"/","description":"A blog dedicated to (mostly) software development; challenges I faced, how I overcame them, etc.","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-	</head>
-	<body data-theme="dark">
-		<nav class="navbar navbar-expand-md navbar-light">
-			<a class="navbar-brand" href="/">Home</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="/projects.html">Projects</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/about.html">About</a>
-					</li>
-					<label class="switch" style="margin-top: 10px; margin-left: 10px;">
-						<input type="checkbox" id="theme-switch" checked="checked">
-						<span class="slider round"></span>
-					</label>
-				</ul>
-			</div>
-		</nav>
-		<div class="container">
-			<div class="content">
-				
+{% for post in site.posts %}
 	<div class="blog-post-index">
 		<h2>
-			<a href="/2020/07/26/faster-gae-deploys.html">Save time by deploying your microservices to GCP in parallel</a>
+			<a href="{{ post.url }}">{{ post.title }}</a>
 		</h2>
-	If you have a microservice based architecture and want to know how to deploy them faster to G Cloud faster, this article is for you. 
-	<a href="/2020/07/26/faster-gae-deploys.html">Read More >></a>
+	{{ post.summary }} 
+	<a href="{{ post.url }}">Read More >></a>
 	</div>
-
-	<div class="blog-post-index">
-		<h2>
-			<a href="/2020/06/23/readiness-checks.html">How to add Readiness Checks for Google App Engine on Django</a>
-		</h2>
-	A while ago I was tasked with adding readiness checks for a Django App. This wasn't as straight forward as I had hoped, so here's a tutorial for the next person who has to do this. 
-	<a href="/2020/06/23/readiness-checks.html">Read More >></a>
-	</div>
-
-	<div class="blog-post-index">
-		<h2>
-			<a href="/2020/06/21/hello-world.html">Hello World</a>
-		</h2>
-	After much, much deliberation and thinking I've decided to go with Jekyll to host this blog. My initial idea was to write my own Blog app using either Django or Ruby on Rails and host it on Google App Engine with Cloud SQL for the database. But if... 
-	<a href="/2020/06/21/hello-world.html">Read More >></a>
-	</div>
-
-			</div>
-		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="/assets/js/js.cookie.js"></script>
-		<script type="text/javascript" src="/assets/js/main.js"></script>
-	</body>
-</html>
+{% endfor %}
