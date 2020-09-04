@@ -22,6 +22,7 @@ function handleTheme(){
 	}
 	document.body.setAttribute(DATA_THEME, themePreference);
 }
+
 handleTheme();
 
 $(function(){
