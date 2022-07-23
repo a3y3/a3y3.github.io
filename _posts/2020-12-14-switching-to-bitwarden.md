@@ -3,7 +3,7 @@ title: I Switched from Dashlane to Bitwarden and Why You Should, Too
 layout: posts
 summary: Dashlane has a lot of problems, some of them critical, that no one seems to talk about in any reviews for some reason. I finally left Dashlane and switched to Bitwarden, which feels much more dependable.
 description: Dashlane has a lot of problems, some of them critical, that no one seems to talk about in any reviews for some reason. I finally left Dashlane and switched to Bitwarden, which feels much more dependable.
-comments: true
+comments: false
 ---
 It's 2020. If you aren't using a password manager yet, [drop everything you're doing and switch to one](https://security.stackexchange.com/a/45067/211865){:target="_blank"}.
 
