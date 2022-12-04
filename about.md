@@ -3,15 +3,13 @@ layout: page
 title: About
 permalink: /about/
 ---
+Hi, my name is Soham Dongargaonkar. I am a Software Engineer and have recently become interested in Distributed Systems and low level systems programming. I spend most of my time developing software, playing games, and wondering about who/what I am.
 
-A medium inspired Jekyll blog theme. The basic idea came from the Ghost theme 
-[Readium 2.0](http://www.svenread.com/readium-ghost-theme/). I use mediator on my own blog [The Base](blog.base68.com).
+As for my professional journey, I have been into computers/software ever since I can remember. Understanding computers comes naturally to me, and I can spend hours and hours writing code or solving bugs. Check out my GitHub [here!](https://github.com/a3y3)
 
-You can **download** the theme here:
-[https://github.com/dirkfabisch/mediator](https://github.com/dirkfabisch/mediator) 
-
-You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
-
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+Here's where you can find me on the internet. I usually am pretty reserved about what I post about on social media, so you might not find a lot of me there.
+<ul>
+	<li><a target="_blank" href="https://github.com/a3y3/Resume/blob/master/Resume_Soham_Dongargaonkar.pdf">Resume</a></li>
+	<li><a target="_blank" href="https://github.com/a3y3">Github</a></li>
+	<li><a target="_blank" href="https://www.linkedin.com/in/soham-dongargaonkar/">LinkedIn</a></li>
+</ul>
