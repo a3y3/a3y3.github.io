@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to add Readiness Checks for Google App Engine on Django"
-categories: cloud enhancement
+categories: cloud
 ---
 A while ago I was tasked with adding <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/configuring-your-app-with-app-yaml#readiness_checks">readiness checks</a> for a Django App. This wasn't as straight forward as I had hoped, so here's a tutorial for the next person who has to do this.
 

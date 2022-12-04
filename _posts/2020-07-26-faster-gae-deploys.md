@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Save time by deploying your microservices to GCP in parallel"
-categories: cloud enhancement
+categories: cloud
 tags: featured
 ---
 ### tl;dr

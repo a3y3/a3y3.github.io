@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Thrash Tuning"
-categories: good-practices
+categories: opinion
 ---
 A term coined by my mentor, thrash tuning is desperately trying out different things until a problem goes away, without giving the problem itself a lot of thought. When you thrash tune, you have no real indication that what you are going to try will even fix the problem. A good example is a slow HTTP request - your first instinct might be to throw a cache in front of the database, but it's possible that the reason you had slowness wasn't because of a slow DB access, it was because of a CPU intensive query. I Googled this term and it didn't show up anywhere, so kudos to him for coming up with it! As a software engineer, when there's an issue, it's very easy to get frustrated and annoyed at bugs - you just want to get rid of them asap. But if you think about it, there are a lot of obvious reasons why thrash tuning is bad. 
 

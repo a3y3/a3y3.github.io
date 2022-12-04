@@ -1,7 +1,6 @@
 ---
 layout: post
 title:  "Hello World"
-categories: jekyll update
 ---
 ### Jekyll
 After much, much deliberation and thinking I've decided to go with <a href="https://jekyllrb.com/">Jekyll</a> to host this blog. My initial idea was to write my own Blog app using either Django or Ruby on Rails and host it on Google App Engine with Cloud SQL for the database. But if you really think about it, that's a lot of work. None of it is particularly difficult, but the amount of time, energy and resources put into doing a thing so simple as to create a Blog on your website is just not worth it, in my opinion.
