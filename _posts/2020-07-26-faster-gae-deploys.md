@@ -108,7 +108,7 @@ jobs:
 {% endhighlight %}
 
 <h4 id="template-parallel-deploys">Modify template to allow parallel deploys</h4>
-A very powerful but rather undocumented of Azure Pipelines is loops. Using these loops, we can reuse our existing job for multiple micoservices. And since jobs run in parallel, all these microservices will deploy at the same time, saving loads of time!</p>
+A very powerful but rather undocumented of Azure Pipelines is loops. Using these loops, we can reuse our existing job for multiple micoservices. And since jobs run in parallel, all these microservices will deploy at the same time, saving loads of time!
 With loops, our pipeline now looks something like:
 {% highlight yaml %}
 # deploy/template.yaml
