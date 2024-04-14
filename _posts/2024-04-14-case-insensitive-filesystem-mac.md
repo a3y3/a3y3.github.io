@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Filenames are case insensitive on MacOS"
-categories: distributed-systems
+categories: general
 tags: featured
 ---
 I recently wrote a unit test that consumed a file and used it for whatever purpose in GoLang. It worked locally, I added, committed and pushed it to my remote that then triggered a build + test Jenkins job for my project.
